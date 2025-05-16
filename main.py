@@ -100,10 +100,9 @@ def catapult(R, phi, phi_stop, L0, k_elas, m):
 
     return x_tab, y_tab, t_tab, gamma_tab, v_tab, distance
 
-x_tab, y_tab, t_tab, gamma_tab, v_tab, distance = catapult(R, phi, phi_stop, L0, k_elas, m)
-
+# defining a plotting function
 def plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels, legend):
-    empty = [0]
+    empty = [0]  # for our legend so we "plot" something and it shows
 
     # trajectory plot
     plt.subplot(221)
@@ -129,7 +128,7 @@ def plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels, legend):
     if legend == True:
         # making the legend 
         plt.subplot(224)
-        plt.plot(empty)
+        plt.plot(empty)  # plotting the list defined above
         plt.axis("off")  # no axis so it's clean and empty
         plt.title("Legend")
         plt.legend(labels, loc="center")
@@ -138,19 +137,16 @@ def plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels, legend):
 var_selection = input("What variable do you want to vary? none / k / L0 / phi_stop: ")
 
 if var_selection == "k":
-    labels_k = []
-
+    labels_k = []  # list for all the k values to add to legend
     # checking for different k values
-    for k in range(int(k_elas), 10500, 250):
+    for k in range(int(k_elas), 10500, 250):  # iterating through different k values
         x_tab, y_tab, t_tab, gamma_tab, v_tab, distance = catapult(R, phi, phi_stop, L0, k, m)
         labels_k.append(f"k = {k}")  # legend expects a string
 
-        plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels_k, legend=True)
-
+        plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels_k, legend=True)  # plotting
 
 elif var_selection == "L0":
     labels_l = []
-
     # checking for different L0 values
     for L in range(10, 0, -2):
         L = L/10  # making back to decimal number
@@ -161,7 +157,6 @@ elif var_selection == "L0":
 
 elif var_selection == "phi_stop":
     labels_phi = []
-
     # checking for different phi values
     for phi_st in range(10, 100, 10):
         phi_st = np.radians(phi_st)
@@ -171,11 +166,9 @@ elif var_selection == "phi_stop":
         plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels_phi, legend=True)
 
 elif var_selection == "none":
-
     x_tab, y_tab, t_tab, gamma_tab, v_tab, distance = catapult(R, phi, phi_stop, L0, k_elas, m)
     labels = []
-
-    #  plotting
+    
     plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels, legend=False)
 
 plt.tight_layout()
