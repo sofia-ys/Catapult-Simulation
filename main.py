@@ -25,7 +25,6 @@ def catapult(R, phi, phi_stop, L0, k_elas, m):
     r_cow = np.cbrt(m / ((4/3) * np.pi * rho_cow))  # cow radius based on mass and density [m]
     A_cow = np.pi * r_cow**2  # cow frontal area [m^2]
 
-
     # initialising
     t_tab = []
     x_tab = []
@@ -56,7 +55,7 @@ def catapult(R, phi, phi_stop, L0, k_elas, m):
         y = R * np.sin(phi)
 
         # more quantities
-        gamma = np.arctan2(vx,vy)  # flight path angle
+        gamma = np.arctan2(vy,vx)  # flight path angle
         v_abs = np.sqrt(vx**2 + vy**2)  # absolute velocity
 
         # storing values
@@ -66,20 +65,20 @@ def catapult(R, phi, phi_stop, L0, k_elas, m):
         gamma_tab.append(gamma)
         v_tab.append(v_abs)
 
-    # print("Launch velocity: ", np.sqrt(vx**2 + vy**2))  # launch velocity
+    print("Launch velocity: ", np.sqrt(vx**2 + vy**2))  # launch velocity
 
     '''ballisitic trajectory phase'''
     while y > -h0:
         t += dt
 
         # more quantities
-        gamma = np.arctan2(vx,vy)  # flight path angle
+        gamma = np.arctan2(vy,vx)  # flight path angle
         v_abs = np.sqrt(vx**2 + vy**2)  # absolute velocity
 
         # forces
         drag = c_d * 0.5 * rho_air * v_abs**2 * A_cow
-        fx_tot = -drag * np.sin(gamma)
-        fy_tot = m * -g -drag * np.cos(gamma)
+        fx_tot = -drag * np.cos(gamma)
+        fy_tot = m * -g -drag * np.sin(gamma)
 
         # kinematics
         ax = fx_tot / m
@@ -99,6 +98,10 @@ def catapult(R, phi, phi_stop, L0, k_elas, m):
     distance = x_tab[-1]  # distance travelled [m]
 
     return x_tab, y_tab, t_tab, gamma_tab, v_tab, distance
+
+x_tab, y_tab, t_tab, gamma_tab, v_tab, distance = catapult(R, phi, phi_stop, L0, k_elas, m)
+
+print(distance)
 
 # defining a plotting function
 def plot(x_tab, y_tab, t_tab, gamma_tab, v_tab, labels, legend):
